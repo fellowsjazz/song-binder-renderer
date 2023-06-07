@@ -2,6 +2,7 @@ import Head from "next/head";
 import Image from "next/image";
 import { Inter } from "next/font/google";
 import { Box, Text, Flex, Spacer, useDisclosure } from "@chakra-ui/react";
+import DisplayTBAofToken from "./components/displayTBAofToken";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,6 +19,8 @@ export default function Home() {
         position="relative"
       >
         <Text fontSize="3xl">Camp 4 Song Binder</Text>
+        <Text>The testnet wallet address of this NFT is: </Text>
+        <DisplayTBAofToken/>
         <BottomTab />
       </Box>
     </Box>
@@ -40,9 +43,7 @@ function BottomTab() {
         onMouseEnter={onOpen}
         onMouseLeave={onClose}
       >
-        <Text fontSize="sm">Hover here</Text>
-        <Spacer />
-        <Text fontSize="sm">&#x25BE;</Text>
+        <Text fontSize="sm">Inventory</Text>
       </Flex>
       {isOpen && (
         <Box
@@ -58,7 +59,10 @@ function BottomTab() {
           onMouseEnter={onOpen}
           onMouseLeave={onClose}
         >
-          <Text>Bottom Drawer Content</Text>
+          <Text>
+            Bottom Drawer Content is sooooooooooooooooooooooooooooooooooooooooo
+            long now, but here's what I fetched
+          </Text>
         </Box>
       )}
     </>

@@ -40,7 +40,7 @@ function BottomTab() {
         onMouseEnter={onOpen}
         onMouseLeave={onClose}
       >
-        <Text fontSize="sm">Click me</Text>
+        <Text fontSize="sm">Hover here</Text>
         <Spacer />
         <Text fontSize="sm">&#x25BE;</Text>
       </Flex>

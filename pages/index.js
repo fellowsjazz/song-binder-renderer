@@ -30,9 +30,17 @@ const apiQuery = `query WalletTokens {
   }
 }`;
 
-///THE ABOVE FUNCTION SHOULD WORK, and the binder NFT should now be holding at least one CD NFT. need to wait for zora's api to update though
+//good shit! it's working well, now I want to play with the ability to set the background content based on clicking withing the inventory
 
 export default function Home() {
+  const [backgroundImageURL, setBackgroundImageURL] = useState(
+    "https://ipfs.io/ipfs/bafybeifxpprjn3t6phqw7vikefh7zvl3rqqqn2ytnykfbfx22lhwxaxd4a/Untitled%20design%20(4).png"
+  );
+
+  const handleCallback = (childData) => {
+    setBackgroundImageURL(childData)
+  }
+
   return (
     <Box display="flex" justifyContent="center">
       <Box
@@ -46,7 +54,7 @@ export default function Home() {
       >
         <Box position="absolute" top={0} left={0} width="100%" height="100%">
           <img
-            src="https://ipfs.io/ipfs/bafybeifxpprjn3t6phqw7vikefh7zvl3rqqqn2ytnykfbfx22lhwxaxd4a/Untitled%20design%20(4).png"
+            src={backgroundImageURL}
             alt="Background Image"
             width="100%"
             height="100%"
@@ -54,17 +62,21 @@ export default function Home() {
           />
         </Box>
         <Box position={"relative"}>
-          <Text fontSize="3xl" color={"white"}>Camp 4 Song Binder</Text>
-          <Text color={"white"}>The goerli testnet wallet address of this NFT is: {<DisplayTBAofToken />}</Text>
-          
+          <Text fontSize="3xl" color={"white"}>
+            Camp 4 Song Binder
+          </Text>
+          <Text color={"white"}>
+            The goerli testnet wallet address of this NFT is:{" "}
+            {<DisplayTBAofToken />}
+          </Text>
         </Box>
-        <BottomTab />
+        <BottomTab callback={handleCallback}/>
       </Box>
     </Box>
   );
 }
 
-function BottomTab() {
+function BottomTab({callback}) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [tokenArray, setTokenArray] = useState([]);
 
@@ -77,10 +89,15 @@ function BottomTab() {
     getData();
   }, [apiQuery]);
 
-  useEffect(() => {
-    //testing useEffect to see if token array populates
-    console.log("token array set to: ", tokenArray);
-  }, [tokenArray]);
+  // useEffect(() => {
+  //   //testing useEffect to see if token array populates
+  //   console.log("token array set to: ", tokenArray);
+  // }, [tokenArray]);
+
+  const handleCallback = (childData) =>{
+    callback(childData)
+    console.log('callback function called from middle component', childData)
+  }
 
   return (
     <>
@@ -117,7 +134,7 @@ function BottomTab() {
           <Flex direction={"row"}>
             {tokenArray?.map((item) => (
               <Box maxH={"20%"}>
-                <InventoryNFT token={item.token} />
+                <InventoryNFT token={item.token} callback={handleCallback}/>
               </Box>
             ))}
           </Flex>

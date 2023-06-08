@@ -44,9 +44,20 @@ export default function Home() {
         alignItems="center"
         position="relative"
       >
-        <Text fontSize="3xl">Camp 4 Song Binder</Text>
-        <Text>The goerli testnet wallet address of this NFT is: </Text>
-        <DisplayTBAofToken />
+        <Box position="absolute" top={0} left={0} width="100%" height="100%">
+          <img
+            src="https://ipfs.io/ipfs/bafybeifxpprjn3t6phqw7vikefh7zvl3rqqqn2ytnykfbfx22lhwxaxd4a/Untitled%20design%20(4).png"
+            alt="Background Image"
+            width="100%"
+            height="100%"
+            objectFit="cover"
+          />
+        </Box>
+        <Box position={"relative"}>
+          <Text fontSize="3xl" color={"white"}>Camp 4 Song Binder</Text>
+          <Text color={"white"}>The goerli testnet wallet address of this NFT is: {<DisplayTBAofToken />}</Text>
+          
+        </Box>
         <BottomTab />
       </Box>
     </Box>
@@ -104,15 +115,12 @@ function BottomTab() {
         >
           <Text>My Camp 4 Collection</Text>
           <Flex direction={"row"}>
-            
-          {tokenArray?.map((item) => (
-            <Box maxH={"20%"}>
-            <InventoryNFT token={item.token} />
-            </Box>
-          ))}
-          
+            {tokenArray?.map((item) => (
+              <Box maxH={"20%"}>
+                <InventoryNFT token={item.token} />
+              </Box>
+            ))}
           </Flex>
-          
         </Box>
       )}
     </>

@@ -1,4 +1,4 @@
-import { Box, Image } from "@chakra-ui/react";
+import { Box, Image, Text } from "@chakra-ui/react";
 
 const InventoryNFT = ({token}) => {
   const imageUrl = `https://gateway.ipfs.io/ipfs/${token?.image?.url.replace('ipfs://','')}`;
@@ -9,9 +9,9 @@ const InventoryNFT = ({token}) => {
   console.log(imageUrl)
 
   return (
-    <Box>
-  <Box>{token?.name}</Box>
-  <Image src={imageUrl} alt={token?.name} />
+    <Box mx={"1%"}>
+  <Image src={imageUrl} alt={token?.name} w={"15rem"} />
+  <Text>{token?.name}</Text>
   </Box>
   );
 };

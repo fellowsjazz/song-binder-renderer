@@ -66,9 +66,10 @@ function BottomTab() {
     getData();
   }, [apiQuery]);
 
-  useEffect(()=>{ //testing useEffect to see if token array populates
-    console.log("token array set to: ", tokenArray)
-  },[tokenArray])
+  useEffect(() => {
+    //testing useEffect to see if token array populates
+    console.log("token array set to: ", tokenArray);
+  }, [tokenArray]);
 
   return (
     <>
@@ -83,7 +84,9 @@ function BottomTab() {
         onMouseEnter={onOpen}
         onMouseLeave={onClose}
       >
-        <Text fontSize="sm">Inventory</Text>
+        <Text fontSize="sm">
+          Binder Address (goerli): {<DisplayTBAofToken />}
+        </Text>
       </Flex>
       {isOpen && (
         <Box
@@ -99,11 +102,17 @@ function BottomTab() {
           onMouseEnter={onOpen}
           onMouseLeave={onClose}
         >
-          <Text>
-            Bottom Drawer Content is sooooooooooooooooooooooooooooooooooooooooo
-            long now, but here's what I fetched
-            <InventoryNFT token={tokenArray[0].token}/>
-          </Text>
+          <Text>My Camp 4 Collection</Text>
+          <Flex direction={"row"}>
+            
+          {tokenArray?.map((item) => (
+            <Box maxH={"20%"}>
+            <InventoryNFT token={item.token} />
+            </Box>
+          ))}
+          
+          </Flex>
+          
         </Box>
       )}
     </>

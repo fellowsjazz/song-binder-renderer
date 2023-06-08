@@ -28,8 +28,8 @@ export default function DisplayTBAofToken() {
   useEffect(() => {
     async function getTBA() {
       const accountAddress = await getAccount(
-        "0xF007Ab65C07ac1F40D63D8cF36D116526eDB7703", // ERC-712 contract address
-        "11", // ERC-721 token ID
+        "0x3e1e2170e91ef5c3612e044f2f3f566e1bb98ec9", // ERC-712 contract address
+        "1", // ERC-721 token ID
         testnetPublicClient // viem public client
       );
       console.log("account address:", accountAddress);

@@ -11,7 +11,7 @@ const InventoryNFT = ({token}) => {
   return (
     <Box>
   <Box>{token?.name}</Box>
-  <Image src={imageUrl} alt={token.name} />
+  <Image src={imageUrl} alt={token?.name} />
   </Box>
   );
 };

@@ -6,6 +6,7 @@ import DisplayTBAofToken from "./components/DisplayTBAofToken";
 import { GraphQLClient } from "graphql-request";
 import { useEffect, useState } from "react";
 import InventoryNFT from "./components/InventoryNFT";
+import AudioPlayer from "./components/AudioPlayer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -13,7 +14,7 @@ const zoraAPI = new GraphQLClient("https://api.zora.co/graphql");
 
 const apiQuery = `query WalletTokens {
   tokens(
-    where: {ownerAddresses: "0x0531D190699f93b8CE77F487a6b8ba72D4f5e733"}
+    where: {ownerAddresses: "0x0531D190699f93b8CE77F487a6b8ba72D4f5e733", collectionAddresses: "0x52aa9ca183657794c1729215e304780ffeac7777"}
     networks: [{network: ETHEREUM, chain: GOERLI}]
   ) {
     nodes {
@@ -36,10 +37,12 @@ export default function Home() {
   const [backgroundImageURL, setBackgroundImageURL] = useState(
     "https://ipfs.io/ipfs/bafybeifxpprjn3t6phqw7vikefh7zvl3rqqqn2ytnykfbfx22lhwxaxd4a/Untitled%20design%20(4).png"
   );
+  const [audioUrl, setAudioUrl] = useState()
 
   const handleCallback = (childData) => {
-    setBackgroundImageURL(childData)
-  }
+    setBackgroundImageURL(childData.imageUrl);
+    setAudioUrl(childData.audioUrl)
+  };
 
   return (
     <Box display="flex" justifyContent="center">
@@ -61,22 +64,38 @@ export default function Home() {
             objectFit="cover"
           />
         </Box>
-        <Box position={"relative"}>
-          <Text fontSize="3xl" color={"white"}>
-            Camp 4 Song Binder
-          </Text>
-          <Text color={"white"}>
+        <Box
+          position="absolute"
+          top={0}
+          left={0}
+          bg="gray.200"
+          borderRadius="md"
+          m={"1%"}
+          p={"1%"}
+        >
+          <Text fontSize="xl">Camp 4 Song Binder</Text>
+          <Text>
             The goerli testnet wallet address of this NFT is:{" "}
             {<DisplayTBAofToken />}
           </Text>
+          
         </Box>
-        <BottomTab callback={handleCallback}/>
+        <Box position="absolute"
+          top={0}
+          right={0}
+          bg="gray.200"
+          borderRadius="md"
+          m={"1%"}
+          p={"1%"}>
+        <AudioPlayer audioUrl={audioUrl}/>
+        </Box>
+        <BottomTab callback={handleCallback} />
       </Box>
     </Box>
   );
 }
 
-function BottomTab({callback}) {
+function BottomTab({ callback }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [tokenArray, setTokenArray] = useState([]);
 
@@ -94,10 +113,10 @@ function BottomTab({callback}) {
   //   console.log("token array set to: ", tokenArray);
   // }, [tokenArray]);
 
-  const handleCallback = (childData) =>{
-    callback(childData)
-    console.log('callback function called from middle component', childData)
-  }
+  const handleCallback = (childData) => {
+    callback(childData);
+    console.log("callback function called from middle component", childData);
+  };
 
   return (
     <>
@@ -134,7 +153,7 @@ function BottomTab({callback}) {
           <Flex direction={"row"}>
             {tokenArray?.map((item) => (
               <Box maxH={"20%"}>
-                <InventoryNFT token={item.token} callback={handleCallback}/>
+                <InventoryNFT token={item.token} callback={handleCallback} />
               </Box>
             ))}
           </Flex>

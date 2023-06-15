@@ -10,18 +10,21 @@ import { getAccount } from "@tokenbound/sdk";
 
 import { createPublicClient, http } from "viem";
 import { mainnet, goerli } from "viem/chains";
+import InventoryTray from "../components/InventoryTray";
+
+const testnetPublicClient = createPublicClient({
+  chain: goerli,
+  transport: http(),
+});
+
+const zoraAPI = new GraphQLClient("https://api.zora.co/graphql");
 
 export default function TokenDetail() {
+  const [tokenBoundAccount, setTokenBoundAccount] = useState();
+  const [tbaHoldings, setTbaHoldings] = useState([]);
   const router = useRouter();
   const tokenId = router.query.tokenId; //this gets the token ID from the dynamic route
 
-  const [tokenBoundAccount, setTokenBoundAccount] = useState("placeholder");
-  const testnetPublicClient = createPublicClient({
-    chain: goerli,
-    transport: http(),
-  });
-
-  const tokenIdString = tokenId?.toString();
 
   //   the following use effect gets the wallet address for any given NFT contract address and token ID
   useEffect(() => {
@@ -31,14 +34,46 @@ export default function TokenDetail() {
         tokenId, // ERC-721 token ID
         testnetPublicClient // viem public client
       );
-      console.log("token id string: ", tokenIdString);
-      console.log("account address:", accountAddress);
       setTokenBoundAccount(accountAddress);
     }
     if (tokenId) {
       getTBA();
     }
   }, [tokenId]);
+
+
+  //this is where the query of TBA holdings happens. the TBA is brought in dynamically, and the collection Addresses we want to display are hardcoded here
+  const apiQuery = `query WalletTokens {
+    tokens(
+      where: {ownerAddresses: "${tokenBoundAccount}", collectionAddresses: "0x58D4c3d19b75b88E749Dc2F17491Bf6A79Af41f4"}
+      networks: [{network: ETHEREUM, chain: GOERLI}]
+    ) {
+      nodes {
+        token {
+          tokenId
+          name
+          owner
+          metadata
+          image {
+            url
+          }
+        }
+      }
+    }
+  }`;
+
+  //this useEffect triggers every time the apiQuery changes (i.e., whenever the TBA address changes), and creates an array of the tokens fetched by the API call
+  useEffect(() => {
+    async function getData() {
+      const data = await zoraAPI.request(apiQuery);
+      console.log("data from zora", data.tokens.nodes);
+      setTbaHoldings(data.tokens.nodes);
+    }
+    if (tokenBoundAccount){
+      getData();
+    }
+    
+  }, [apiQuery]);
 
   return (
     <Box display="flex" justifyContent="center">
@@ -52,7 +87,8 @@ export default function TokenDetail() {
         position="relative"
       >
         <Text>This is Test CD #{tokenId}</Text>
-        <Text>TBA: {tokenBoundAccount}</Text>
+        <Text>Goerli Testnet TBA: {tokenBoundAccount}</Text>
+        <InventoryTray/>
       </Box>
     </Box>
   );
